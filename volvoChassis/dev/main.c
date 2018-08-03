@@ -14,9 +14,11 @@
     limitations under the License.
 */
 #include "main.h"
+#include "defines.h"
+#include "shellcfg.h"
 
-
-int main(void) {
+int main(void)
+{
 
   /*
    * System initializations.
@@ -28,15 +30,18 @@ int main(void) {
   halInit();
   chSysInit();
 
+  LEDG_ON();
+
   can_processInit();
+  chassisInit();
+
+  shellStart();
 
   while (true)
   {
 
     chThdSleepMilliseconds(500);
-
   }
 
   return 0;
-
 }
