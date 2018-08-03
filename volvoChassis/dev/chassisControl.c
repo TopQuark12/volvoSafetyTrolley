@@ -18,18 +18,14 @@ int16_t back_left;
 
 void driveKinematics(void) {
 
-    int16_t drive  = rcControl->yJoystick;														//strafe
-    int16_t strafe = rcControl->xJoystick * rcControl->button;				//rotate
-    int16_t rotate = rcControl->xJoystick * (1 - rcControl->button);	//drive
+    int16_t drive  = rcControl->yJoystick;
+    int16_t strafe = rcControl->xJoystick * rcControl->button;
+    int16_t rotate = rcControl->xJoystick * (1 - rcControl->button);
 
-//    int16_t strafe  = rcControl->yJoystick;														//strafe
-//    int16_t rotate = rcControl->xJoystick * rcControl->button;				//rotate
-//    int16_t drive = rcControl->xJoystick * (1 - rcControl->button);		//drive
-
-    front_right = -(-1*rotate + strafe + drive);   // CAN ID: 0x201
-    back_right = -(rotate + strafe + drive);       // CAN ID: 0x202
-    front_left = (rotate - strafe + drive);       // CAN ID: 0x203
-    back_left = (-1*rotate - strafe + drive);     // CAN ID: 0x204
+    front_right = -(-1*rotate + strafe + drive);   	// CAN ID: 0x201
+    back_right = -(rotate + strafe + drive);       	// CAN ID: 0x202
+    front_left = (rotate - strafe + drive);      	 	// CAN ID: 0x203
+    back_left = (-1*rotate - strafe + drive);     	// CAN ID: 0x204
 
 }
 
