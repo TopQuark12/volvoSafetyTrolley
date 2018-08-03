@@ -43,7 +43,7 @@ typedef struct {
 #define PI									3.14159265
 #define RPM2MPS(x)					(((x / GEAR_RATIO) / RPM2RPS * WHEEL_CIRCUM) * PI)
 
-#define MAXSPEED						1.5
+#define MAXSPEED						0.75		//abs max 1.5
 
 void chassisInit(void);
 

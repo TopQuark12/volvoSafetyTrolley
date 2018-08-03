@@ -8,9 +8,11 @@
 #include "chassisControl.h"
 #include "canBusProcess.h"
 #include <string.h>
+#include "tof.h"
 
 static volatile Remote_canStruct* rcControl;
 static volatile ChassisEncoder_canStruct* chassisData;
+static icucnt_t* tofData;
 
 float velCommand[4];
 float currentCommand[4];
@@ -78,6 +80,10 @@ void driveCloseLoop(uint8_t move) {
 		float drive  = rcControl->yJoystick / MAXJOYSTICKVAL;														//-1 to 1
 		float strafe = rcControl->xJoystick * rcControl->button / MAXJOYSTICKVAL;				//-1 to 1
 		float rotate = rcControl->xJoystick * (1 - rcControl->button) / MAXJOYSTICKVAL;	//-1 to 1
+
+		if ((tofData[0] < 30 || tofData[1] < 30 || tofData[2] < 30) && drive > 0) {
+			drive = 0;
+		}
 
 		velCommand[frontRight] = -(-1*rotate + strafe + drive) * MAXSPEED;   	// CAN ID: 0x201
 		velCommand[backRight] = -(rotate + strafe + drive) * MAXSPEED;       	// CAN ID: 0x202
@@ -170,6 +176,7 @@ void chassisInit(void) {
 
 	rcControl = can_get_remoteData();
 	chassisData = can_getChassisMotor();
+	tofData = getTofData();
 
   chThdCreateStatic(chassisControlThd_wa, sizeof(chassisControlThd_wa),
                       NORMALPRIO + 5, chassisControlThd, NULL);
