@@ -1,0 +1,16 @@
+OpenWindow="Watched Data", DockArea=RIGHT, x=0, y=0, w=289, h=816, FilterBarShown=0, 
+OpenWindow="Console", DockArea=BOTTOM, x=0, y=0, w=514, h=118, FilterBarShown=0, 
+OpenWindow="Global Data", DockArea=RIGHT, x=0, y=0, w=289, h=816, FilterBarShown=1, 
+OpenWindow="Breakpoints", DockArea=LEFT, x=0, y=0, w=251, h=277, FilterBarShown=0, 
+OpenWindow="Functions", DockArea=LEFT, x=0, y=2, w=251, h=277, FilterBarShown=1, 
+OpenWindow="Source Files", DockArea=LEFT, x=0, y=1, w=251, h=276, FilterBarShown=1, 
+OpenWindow="Data Graph", DockArea=BOTTOM, x=1, y=0, w=1405, h=118, FilterBarShown=0, 
+OpenWindow="Disassembly", DockArea=RIGHT, x=0, y=0, w=289, h=816, FilterBarShown=0, ExecCountersShown=0
+OpenToolbar="Debug", Floating=0, x=0, y=0
+TableHeader="Watched Data", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Value";"Location";"Size";"Refresh";"Type"], ColWidths=[77;84;84;44;63;48]
+TableHeader="Global Data", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Location";"Size";"Type"], ColWidths=[140;84;84;49;283]
+TableHeader="Breakpoints", SortCol="State", SortOrder="ASCENDING", VisibleCols=["State";"Location";"Permitted Impl.";"Actual Impl.";"Context";"Task Filter";"Skip #";"Condition"], ColWidths=[73;144;149;125;290;109;85;70]
+TableHeader="Functions", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Address";"Size";"#Insts";"Source"], ColWidths=[145;101;66;84;244]
+TableHeader="Source Files", SortCol="File", SortOrder="ASCENDING", VisibleCols=["File";"Status";"Size";"#Insts";"Path"], ColWidths=[150;86;66;84;254]
+TableHeader="Data Graph Samples", SortCol="Index", SortOrder="ASCENDING", VisibleCols=["Index";"Time"], ColWidths=[10;630]
+TableHeader="Data Graph Setup", SortCol="Expression", SortOrder="DESCENDING", VisibleCols=["Expression";"Type";"Value";"Min";"Max";"Average";"# Changes";"Min. Change";"Max. Change"], ColWidths=[77;48;50;41;45;66;78;85;915]
