@@ -5,5 +5,6 @@
 #include "hal.h"
 
 #include "canBusProcess.h"
+#include "chassisControl.h"
 
 #endif

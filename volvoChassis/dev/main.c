@@ -29,6 +29,7 @@ int main(void) {
   chSysInit();
 
   can_processInit();
+  chassisInit();
 
   while (true)
   {

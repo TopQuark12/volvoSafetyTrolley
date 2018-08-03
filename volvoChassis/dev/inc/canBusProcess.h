@@ -6,18 +6,15 @@
 #include "stdbool.h"
 #include "hal.h"
 
-
-#define BARREL_CAN        &CAND1
-
-#define GIMBAL_MOTOR_NUM  2U
 #define CHASSIS_MOTOR_NUM 4U
-#define EXTRA_MOTOR_NUM   4U
 
 /* CAN Bus 1 or 2 */
+#define CAN_CHASSIS_CONTROL_ID											0x200
+
 #define CAN_CHASSIS_FR_FEEDBACK_MSG_ID              0x201
-#define CAN_CHASSIS_FL_FEEDBACK_MSG_ID              0x202
-#define CAN_CHASSIS_BL_FEEDBACK_MSG_ID              0x203
-#define CAN_CHASSIS_BR_FEEDBACK_MSG_ID              0x204
+#define CAN_CHASSIS_FL_FEEDBACK_MSG_ID              0x203
+#define CAN_CHASSIS_BL_FEEDBACK_MSG_ID              0x204
+#define CAN_CHASSIS_BR_FEEDBACK_MSG_ID              0x202
 
 #define CAN_REMOTE_RECEIVER_ID                			0x050
 #define CAN_REMOTE_SEND_MODE_ID               			0x055
@@ -25,27 +22,12 @@
 #define CAN_ENCODER_RANGE           8192            // 0x2000
 #define CAN_ENCODER_RADIAN_RATIO    7.669904e-4f    // 2*M_PI / 0x2000
 
-#define CAN_CHASSIS_DEBUG_FR 0x211
-#define CAN_CHASSIS_DEBUG_FL 0x212
-#define CAN_CHASSIS_DEBUG_BL 0x213
-#define CAN_CHASSIS_DEBUG_BR 0x214
-
 typedef enum
 {
-  GIMBAL_YAW = 0,
-  GIMBAL_PITCH
-}gimbal_num_t;
-
-typedef enum
-{
-//  FRONT_LEFT = 1,
-//  FRONT_RIGHT = 3,
-//  BACK_LEFT = 0,
-//  BACK_RIGHT = 2
     FRONT_RIGHT = 0,
-    FRONT_LEFT = 1,
-    BACK_LEFT = 2,
-    BACK_RIGHT = 3
+    FRONT_LEFT = 2,
+    BACK_LEFT = 3,
+    BACK_RIGHT = 1
 }chassis_num_t;
 
 typedef struct {
