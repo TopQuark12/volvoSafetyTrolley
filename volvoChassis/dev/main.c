@@ -14,7 +14,10 @@
     limitations under the License.
 */
 #include "main.h"
+#include "defines.h"
+#include "shellcfg.h"
 
+<<<<<<< HEAD
 icucnt_t last_width;
 icucnt_t last_period;
 
@@ -48,6 +51,10 @@ static ICUConfig icucfg = {
 };
 
 int main(void) {
+=======
+int main(void)
+{
+>>>>>>> ac1fd7db41ae18da84d9653f9451188bef604278
 
   /*
    * System initializations.
@@ -59,8 +66,12 @@ int main(void) {
   halInit();
   chSysInit();
 
+  LEDG_ON();
+
   can_processInit();
   chassisInit();
+  
+  shellStart();
 
   last_period = 0;
   last_width = 0;
@@ -73,9 +84,7 @@ int main(void) {
   {
 
     chThdSleepMilliseconds(500);
-
   }
 
   return 0;
-
 }
