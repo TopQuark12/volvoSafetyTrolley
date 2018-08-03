@@ -15,25 +15,25 @@
 */
 #include "main.h"
 
-icucnt_t last_width;
-icucnt_t last_period;
+icucnt_t last_width[2];
+icucnt_t last_period[2];
 
 static void icuwidthcb(ICUDriver *icup) {
 
   //palSetPad(GPIOD, GPIOD_LED4);
-  last_width = icuGetWidthX(icup);
+  last_width[0] = icuGetWidthX(icup);
 }
 
 static void icuperiodcb(ICUDriver *icup) {
 
   //palClearPad(GPIOD, GPIOD_LED4);
-  last_period = icuGetPeriodX(icup);
+  last_period[0] = icuGetPeriodX(icup);
 }
 
 static void icuoverflowcb(ICUDriver *icup) {
 
   //palClearPad(GPIOD, GPIOD_LED4);
-  last_period = icuGetPeriodX(icup);
+  last_period[0] = icuGetPeriodX(icup);
 
 }
 
@@ -61,9 +61,11 @@ int main(void) {
 
   can_processInit();
   chassisInit();
-
-  last_period = 0;
-  last_width = 0;
+//
+//  last_period = 0;
+//  last_width = 0;
+  memset(&last_period, 0, sizeof(icucnt_t) * 2);
+  memset(&last_width, 0, sizeof(icucnt_t) * 2);
   icuStart(&ICUD8, &icucfg);
 	palSetPadMode(GPIOI, 5, PAL_MODE_ALTERNATE(3));
 	icuStartCapture(&ICUD8);
