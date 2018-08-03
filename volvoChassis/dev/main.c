@@ -15,6 +15,37 @@
 */
 #include "main.h"
 
+icucnt_t last_width;
+icucnt_t last_period;
+
+static void icuwidthcb(ICUDriver *icup) {
+
+  //palSetPad(GPIOD, GPIOD_LED4);
+  last_width = icuGetWidthX(icup);
+}
+
+static void icuperiodcb(ICUDriver *icup) {
+
+  //palClearPad(GPIOD, GPIOD_LED4);
+  last_period = icuGetPeriodX(icup);
+}
+
+static void icuoverflowcb(ICUDriver *icup) {
+
+  //palClearPad(GPIOD, GPIOD_LED4);
+  last_period = icuGetPeriodX(icup);
+
+}
+
+static ICUConfig icucfg = {
+  ICU_INPUT_ACTIVE_HIGH,
+  10000,                                    /* 10kHz ICU clock frequency.   */
+  icuwidthcb,
+  icuperiodcb,
+  icuoverflowcb,
+  ICU_CHANNEL_1,
+  0
+};
 
 int main(void) {
 
@@ -30,6 +61,13 @@ int main(void) {
 
   can_processInit();
   chassisInit();
+
+  last_period = 0;
+  last_width = 0;
+  icuStart(&ICUD8, &icucfg);
+	palSetPadMode(GPIOI, 5, PAL_MODE_ALTERNATE(3));
+	icuStartCapture(&ICUD8);
+	icuEnableNotifications(&ICUD8);
 
   while (true)
   {
