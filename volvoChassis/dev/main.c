@@ -34,7 +34,7 @@ int main(void)
 
   can_processInit();
   chassisInit();
-
+  
   shellStart();
 
   while (true)

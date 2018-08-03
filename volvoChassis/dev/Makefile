@@ -127,11 +127,7 @@ CSRC = $(STARTUPSRC) \
        $(CHIBIOS)/os/various/syscalls.c \
 			 $(CHIBIOS)/os/hal/lib/streams/memstreams.c \
        $(CHIBIOS)/os/hal/lib/streams/chprintf.c \
-<<<<<<< HEAD
-       main.c canBusProcess.c shellcfg.c usbcfg.c
-=======
-       main.c canBusProcess.c chassisControl.c
->>>>>>> bf5494195f54fb022a745ba84c121a02bdc3f30e
+       main.c canBusProcess.c shellcfg.c usbcfg.c chassisControl.c
 
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
