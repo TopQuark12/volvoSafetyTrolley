@@ -30,7 +30,7 @@ void driveKinematics(void) {
 
     float drive  = rcControl->yJoystick / MAXJOYSTICKVAL;														//-1 to 1
     float strafe = rcControl->xJoystick * rcControl->button / MAXJOYSTICKVAL;				//-1 to 1
-    float rotate = rcControl->xJoystick * (1 - rcControl->button) / MAXJOYSTICKVAL;	//-1 to 1
+    float rotate = -rcControl->xJoystick * (1 - rcControl->button) / MAXJOYSTICKVAL;	//-1 to 1
 
     currentCommand[frontRight] = -(-1*rotate + strafe + drive) * 10000;   	// CAN ID: 0x201
     currentCommand[backRight] = -(rotate + strafe + drive) * 10000;       	// CAN ID: 0x202
@@ -78,8 +78,8 @@ void driveCloseLoop(uint8_t move) {
 
   if (move) {
 		float drive  = rcControl->yJoystick / MAXJOYSTICKVAL;														//-1 to 1
-		float strafe = rcControl->xJoystick * rcControl->button / MAXJOYSTICKVAL;				//-1 to 1
-		float rotate = rcControl->xJoystick * (1 - rcControl->button) / MAXJOYSTICKVAL;	//-1 to 1
+		float strafe = rcControl->xJoystick * (1 - rcControl->button) / MAXJOYSTICKVAL;				//-1 to 1
+		float rotate = -rcControl->xJoystick * (rcControl->button) / MAXJOYSTICKVAL;	//-1 to 1
 
 		if ((tofData[0] < 30 || tofData[1] < 30 || tofData[2] < 30) && drive > 0) {
 			drive = 0;
