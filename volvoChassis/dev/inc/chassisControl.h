@@ -35,7 +35,7 @@ typedef struct {
 
 }pidProfile_t;
 
-#define MAXJOYSTICKVAL			2070.0
+#define MAXJOYSTICKVAL			530.0
 
 #define GEAR_RATIO					36.0
 #define RPM2RPS							60.0
@@ -43,7 +43,7 @@ typedef struct {
 #define PI									3.14159265
 #define RPM2MPS(x)					(((x / GEAR_RATIO) / RPM2RPS * WHEEL_CIRCUM) * PI)
 
-#define MAXSPEED						0.75		//abs max 1.5
+#define MAXSPEED						0.5		//abs max 1.5
 
 void chassisInit(void);
 

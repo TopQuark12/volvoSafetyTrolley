@@ -27,7 +27,8 @@ int main(void) {
   halInit();
   chSysInit();
 
-  tofInit();
+  //tofInit();
+  judgeinit();
   can_processInit();
   chassisInit();
 

@@ -7,6 +7,7 @@
 
 #include "chassisControl.h"
 #include "canBusProcess.h"
+#include "rcRemote.h"
 #include <string.h>
 #include "tof.h"
 
@@ -19,7 +20,7 @@ float currentCommand[4];
 pidProfile_t wheelPID[4];
 uint8_t openLoopControl = 0;
 
-float kP = 1;
+float kP = 1000;
 float kI = 0;
 float kD = 0;
 float maxCurrent = 10000.0;
@@ -81,9 +82,7 @@ void driveCloseLoop(uint8_t move) {
 		float strafe = rcControl->xJoystick * (1 - rcControl->button) / MAXJOYSTICKVAL;				//-1 to 1
 		float rotate = -rcControl->xJoystick * (rcControl->button) / MAXJOYSTICKVAL;	//-1 to 1
 
-		if ((tofData[0] < 30 || tofData[1] < 30 || tofData[2] < 30) && drive > 0) {
-			drive = 0;
-		}
+
 
 		velCommand[frontRight] = -(-1*rotate + strafe + drive) * MAXSPEED;   	// CAN ID: 0x201
 		velCommand[backRight] = -(rotate + strafe + drive) * MAXSPEED;       	// CAN ID: 0x202
@@ -146,7 +145,7 @@ static THD_FUNCTION(chassisControlThd, p) {
     now = chVTGetSystemTime();
     next = now + US2ST(1000);
 
-    if (rcControl->updated && (maxed(rcControl->xJoystick, 10)
+    if ((maxed(rcControl->xJoystick, 10)
     		|| maxed(rcControl->yJoystick, 10))) {
     	if (openLoopControl) {
     		driveKinematics();
@@ -174,7 +173,7 @@ static THD_FUNCTION(chassisControlThd, p) {
 
 void chassisInit(void) {
 
-	rcControl = can_get_remoteData();
+	rcControl = getRemoteData();
 	chassisData = can_getChassisMotor();
 	tofData = getTofData();
 
