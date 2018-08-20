@@ -12,6 +12,7 @@
 #include "tof.h"
 
 static volatile Remote_canStruct* rcControl;
+static joystick_t* stick;
 static volatile ChassisEncoder_canStruct* chassisData;
 static icucnt_t* tofData;
 
@@ -30,8 +31,8 @@ float maxI = 100.0;
 void driveKinematics(void) {
 
     float drive  = rcControl->yJoystick / MAXJOYSTICKVAL;														//-1 to 1
-    float strafe = rcControl->xJoystick * rcControl->button / MAXJOYSTICKVAL;				//-1 to 1
-    float rotate = -rcControl->xJoystick * (1 - rcControl->button) / MAXJOYSTICKVAL;	//-1 to 1
+    float strafe = 0;				//-1 to 1
+    float rotate = -(stick->xReading - 2200)  / MAXXJOYSTICKVAL * XGAIN;	//-1 to 1
 
     currentCommand[frontRight] = -(-1*rotate + strafe + drive) * 10000;   	// CAN ID: 0x201
     currentCommand[backRight] = -(rotate + strafe + drive) * 10000;       	// CAN ID: 0x202
@@ -75,12 +76,27 @@ static uint8_t maxed(int16_t a, float ABS_MAX)
 
 }
 
+float lastForce = 0.0;
+float sumForce = 0.0;
+
 void driveCloseLoop(uint8_t move) {
 
   if (move) {
-		float drive  = rcControl->yJoystick / MAXJOYSTICKVAL;														//-1 to 1
-		float strafe = rcControl->xJoystick * (1 - rcControl->button) / MAXJOYSTICKVAL;				//-1 to 1
-		float rotate = -rcControl->xJoystick * (rcControl->button) / MAXJOYSTICKVAL;	//-1 to 1
+		float drive  = ((stick->correctedForceReading > 200.0) && (tofData[0] > 25)) ?
+									 stick->correctedForceReading / MAXFORCEVAL * FORCEGAIN :
+									 0;														//-1 to 1
+//  	float drive  = stick->correctedForceReading / MAXFORCEVAL * FORCEGAIN;
+//  	stick->correctedForceReading = stick->correctedForceReading / MAXFORCEVAL;
+//  	float drive = stick->correctedForceReading > FERROR?
+//  								(stick->correctedForceReading - FERROR) * FORCEP +
+//									((stick->correctedForceReading - FERROR) - lastForce) * FORCED +
+//									sumForce * FORCEI :
+//									0;
+  	lastForce = stick->correctedForceReading - FERROR;
+  	sumForce += stick->correctedForceReading - FERROR;
+  	sumForce *= FORCEDECAY;
+		float strafe = (stick->xReading - 2050)  / MAXXJOYSTICKVAL * XGAIN;				//-1 to 1
+		float rotate = 0;	//-1 to 1	//-1 to 1
 
 
 
@@ -145,19 +161,14 @@ static THD_FUNCTION(chassisControlThd, p) {
     now = chVTGetSystemTime();
     next = now + US2ST(1000);
 
-    if ((maxed(rcControl->xJoystick, 10)
-    		|| maxed(rcControl->yJoystick, 10))) {
-    	if (openLoopControl) {
-    		driveKinematics();
-    	} else {
+    if (palReadPad(GPIOD, 14) == 0) {
+
     		driveCloseLoop(MOVE);
-    	}
+
     } else {
-    	if (openLoopControl) {
-    		driveZero();
-    	} else {
+
     		driveCloseLoop(BREAK);
-    	}
+
     }
 
     rcControl->updated = 0;
@@ -174,8 +185,10 @@ static THD_FUNCTION(chassisControlThd, p) {
 void chassisInit(void) {
 
 	rcControl = getRemoteData();
+	stick = getJoystickData();
 	chassisData = can_getChassisMotor();
 	tofData = getTofData();
+	palSetPadMode(GPIOD, 14, PAL_MODE_INPUT_PULLDOWN);
 
   chThdCreateStatic(chassisControlThd_wa, sizeof(chassisControlThd_wa),
                       NORMALPRIO + 5, chassisControlThd, NULL);

@@ -21,10 +21,20 @@
 
 #define LEAST_SET_BIT(x)        x&(-x)      //Clear all but least set bit
 
-#define JUDGEACQTIME            6           //Milliseconds
+#define JUDGEACQTIME            2           //Milliseconds
 
 #define SERIAL_EVT_MASK         1
 
+typedef struct joystick_t{
+
+	int32_t forceReading;
+	int16_t xReading;
+	int16_t yReading;
+	float correctedForceReading;
+
+}__attribute__((packed)) joystick_t;
+
+joystick_t* getJoystickData(void);
 Remote_canStruct* getRemoteData(void);
 void judgeinit(void);
 

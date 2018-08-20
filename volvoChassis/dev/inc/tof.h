@@ -8,7 +8,7 @@
 #ifndef INC_TOF_H_
 #define INC_TOF_H_
 
-#define TOFSENSORSNUM			3
+#define TOFSENSORSNUM			1
 
 icucnt_t* getTofData(void);
 void tofInit(void);

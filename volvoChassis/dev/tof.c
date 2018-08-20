@@ -57,16 +57,8 @@ void tofInit(void) {
   memset(&last_period, 0, sizeof(icucnt_t) * TOFSENSORSNUM);
   memset(&last_width, 0, sizeof(icucnt_t) * TOFSENSORSNUM);
   icuStart(&ICUD4, &icucfg);
-  icuStart(&ICUD5, &icucfg);
-  icuStart(&ICUD8, &icucfg);
-  palSetPadMode(GPIOI, 5, PAL_MODE_ALTERNATE(3));
   palSetPadMode(GPIOD, 12, PAL_MODE_ALTERNATE(2));
-	palSetPadMode(GPIOH, 10, PAL_MODE_ALTERNATE(2));
 	icuStartCapture(&ICUD4);
 	icuEnableNotifications(&ICUD4);
-	icuStartCapture(&ICUD5);
-	icuEnableNotifications(&ICUD5);
-	icuStartCapture(&ICUD8);
-	icuEnableNotifications(&ICUD8);
 
 }

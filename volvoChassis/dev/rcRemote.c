@@ -13,6 +13,14 @@ Remote_canStruct remoteData;
 static uint8_t sdrxbuf[JUDGE_BUFFER_SIZE];
 static uint8_t datalength = 0;
 
+joystick_t joystick;
+
+joystick_t* getJoystickData(void) {
+
+	return &joystick;
+
+}
+
 Remote_canStruct* getRemoteData(void) {
 
 	return &remoteData;
@@ -28,13 +36,9 @@ static const SerialConfig SERIAL_JUDGE_CONFIG = {
 
 void serialDecode(void) {
 
-	if (sdrxbuf[0] == 255 && sdrxbuf[6] == 255){
-		uint16_t buf;
-		memcpy(&buf, sdrxbuf + 1, sizeof(uint16_t));
-		remoteData.yJoystick = buf - 497;
-		memcpy(&buf, sdrxbuf + 3, sizeof(uint16_t));
-		remoteData.xJoystick = buf - 435 - 93;
-		memcpy(&remoteData.button, sdrxbuf + 5, sizeof(uint8_t));
+	if (sdrxbuf[0] == 170 && sdrxbuf[9] == 170){
+		memcpy(&joystick, sdrxbuf + 1, sizeof(uint8_t) * 8);
+		joystick.correctedForceReading = (8315500.0 - joystick.forceReading) / 100.0;
 		remoteData.updated = 1;
 	}
 
@@ -122,6 +126,7 @@ static THD_FUNCTION(JudgeThread, arg) {
 void judgeinit(void) {
 
 	memset(&remoteData, 0, sizeof(remoteData));
+	memset(&joystick, 0, sizeof(joystick));
   palSetPadMode(GPIOG, 14, PAL_MODE_ALTERNATE(8));              //UART6 TX
   palSetPadMode(GPIOG, 9, PAL_MODE_ALTERNATE(8));               //UART6 RX
   sdStart(SERIAL_JUDGE, &SERIAL_JUDGE_CONFIG);                  //Start Serial Driver
